@@ -1,0 +1,66 @@
+package com.test.spring.boot.app.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.test.spring.boot.app.models.entity.Taza;
+import com.test.spring.boot.app.models.services.ITazaService;
+
+@CrossOrigin(origins = { "http://localhost:4200" })
+@RestController
+@RequestMapping("/api")
+public class TazaRestController {
+
+	@Autowired
+	private ITazaService tazaService;
+
+	@GetMapping("/tazas")
+	public List<Taza> index() {
+		return tazaService.findAll();
+	}
+
+	@GetMapping("/tazas/{id}")
+	public Taza show(@PathVariable Long id) {
+		return tazaService.findById(id);
+	}
+
+	@PostMapping("/tazas")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Taza create(@RequestBody Taza taza) {
+		return tazaService.save(taza);
+	}
+
+	@PutMapping("/tazas/{id}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Taza update(@RequestBody Taza taza, @PathVariable Long id) {
+
+		Taza tazaActual = tazaService.findById(id);
+
+		tazaActual.setCalidad(taza.getCalidad());
+		tazaActual.setCantidad(taza.getCantidad());
+		tazaActual.setCapacidad(taza.getCapacidad());
+		tazaActual.setColor(taza.getColor());
+		tazaActual.setMaterial(taza.getMaterial());
+		tazaActual.setModelo(taza.getModelo());
+
+		return tazaService.save(tazaActual);
+	}
+
+	@DeleteMapping("/tazas/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Long id) {
+		tazaService.delete(id);
+	}
+}
