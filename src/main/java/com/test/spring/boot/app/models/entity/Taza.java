@@ -24,7 +24,7 @@ public class Taza implements Serializable {
 	private String color;
 	@Column(nullable = false)
 	private String material;
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String modelo;
 	private int cantidad;
 
